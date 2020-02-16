@@ -12,58 +12,93 @@ import java.util.*;
 
 public class Main {
 
+    private static int sizeArray;
+
     public static void main(String[] args) throws IOException {
         Scanner scan = new Scanner(System.in);
         boolean finished = false;
-        Stack<Number> numeros;
         int userSelection;
         int orderSelection;
+        //Opciones de inicio
+        System.out.println("Escriba cuantos numeros va a ordenar");
+        sizeArray = scan.nextInt();
+        scan.nextLine();
+        generateRandomNumbers();
+        generateOrderedNumbers();
+        Comparable[] numeros = new Comparable[sizeArray];
         //Ciclo para mostrar el menu del programa
         while(!finished) {
             userSelection = showMenu();
             switch(userSelection) {
                 case 1:
-                    generateRandomNumbers();
+                    System.out.println("Desea usar:\n1. Aleatoreos\n2. Ordenados");
+                    orderSelection = scan.nextInt();
+                    scan.nextLine();
+                    if (orderSelection == 1) {
+                        numeros = readFile(false);
+                    } else if (orderSelection == 2) {
+                        numeros = readFile(true);
+                    }
+                    SelectionSort selectionSort = new SelectionSort();
+                    imprimirNumeros(numeros);
+                    numeros = selectionSort.sort(numeros);
+                    imprimirNumeros(numeros);
                 break;
                 case 2:
-                    generateOrderedNumbers();
+                    System.out.println("Desea usar:\n1. Aleatoreos\n2. Ordenados");
+                    orderSelection = scan.nextInt();
+                    scan.nextLine();
+                    if (orderSelection == 1) {
+                        numeros = readFile(false);
+                    } else if (orderSelection == 2) {
+                        numeros = readFile(true);
+                    }
+                    MergeSort mergeSort = new MergeSort();
+                    imprimirNumeros(numeros);
+                    numeros = mergeSort.sort(numeros);
+                    imprimirNumeros(numeros);
                 break;
                 case 3:
                     System.out.println("Desea usar:\n1. Aleatoreos\n2. Ordenados");
                     orderSelection = scan.nextInt();
                     scan.nextLine();
-                    SelectionSort selectionSort = new SelectionSort();
                     if (orderSelection == 1) {
                         numeros = readFile(false);
-                        selectionSort.sort(numeros);
                     } else if (orderSelection == 2) {
                         numeros = readFile(true);
-                        selectionSort.sort(numeros);
                     }
+                    QuickSort quickSort = new QuickSort();
+                    imprimirNumeros(numeros);
+                    numeros = quickSort.sort(numeros);
+                    imprimirNumeros(numeros);
                 break;
                 case 4:
                     System.out.println("Desea usar:\n1. Aleatoreos\n2. Ordenados");
                     orderSelection = scan.nextInt();
                     scan.nextLine();
-                    MergeSort mergeSort = new MergeSort();
                     if (orderSelection == 1) {
                         numeros = readFile(false);
-                        imprimirNumeros(numeros);
-                        numeros = mergeSort.sort(numeros);
-                        imprimirNumeros(numeros);
                     } else if (orderSelection == 2) {
                         numeros = readFile(true);
-                        mergeSort.sort(numeros);
                     }
+                    RadixSort radixSort = new RadixSort();
+                    imprimirNumeros(numeros);
+                    numeros = intToComparable(radixSort.sort(comparableToInt(numeros)));
+                    imprimirNumeros(numeros);
                 break;
                 case 5:
-
-                break;
-                case 6:
-
-                break;
-                case 7:
-
+                    System.out.println("Desea usar:\n1. Aleatoreos\n2. Ordenados");
+                    orderSelection = scan.nextInt();
+                    scan.nextLine();
+                    if (orderSelection == 1) {
+                        numeros = readFile(false);
+                    } else if (orderSelection == 2) {
+                        numeros = readFile(true);
+                    }
+                    BubbleSort bubbleSort = new BubbleSort();
+                    imprimirNumeros(numeros);
+                    numeros = bubbleSort.sort(numeros);
+                    imprimirNumeros(numeros);
                 break;
             }
         }
@@ -71,13 +106,11 @@ public class Main {
 
     private static int showMenu() {
         System.out.println("------------METODOS DE SORTING----------------");
-        System.out.println("1. Generar archivo de n numeros aleatoreos");
-        System.out.println("2. Generar archivo de n numeros ordenados");
-        System.out.println("3. Selection sort");
-        System.out.println("4. Merge sort");
-        System.out.println("5. Quick sort");
-        System.out.println("6. Radix sort");
-        System.out.println("7. Bubble sort");
+        System.out.println("1. Selection sort");
+        System.out.println("2. Merge sort");
+        System.out.println("3. Quick sort");
+        System.out.println("4. Radix sort");
+        System.out.println("5. Bubble sort");
         Scanner scan = new Scanner(System.in);
         int userSelection = scan.nextInt();
         scan.nextLine();
@@ -86,10 +119,6 @@ public class Main {
 
     //Ayudita de Exon Fernando: http://decodigo.com/java-crear-archivos-de-texto
     private static void generateRandomNumbers() throws IOException {
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Ingrese la cantidad de numeros que tendra la lista");
-        int sizeArray = scan.nextInt();
-        scan.nextLine();
         String numbers = "";
         for (int i = 0; i < sizeArray; i++) {
             numbers += String.valueOf((int) (Math.random() * (sizeArray * 2)) - sizeArray) + "\n";
@@ -107,10 +136,6 @@ public class Main {
 
     //Extraido de: http://decodigo.com/java-leer-un-archivo-de-texto
     private static void generateOrderedNumbers() throws IOException {
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Ingrese la cantidad de numeros que tendra la lista");
-        int sizeArray = scan.nextInt();
-        scan.nextLine();
         String numbers = "";
         for (int i = 0; i < sizeArray; i++) {
             numbers += String.valueOf(i) + "\n";
@@ -126,26 +151,47 @@ public class Main {
         bufferedWriter.close();
     }
 
-    private static Stack<Number> readFile(boolean ordered) throws FileNotFoundException { //Se determino que Stack era el tipo de lista mas apropiada para ordenar
+    private static Comparable[] readFile(boolean ordered) throws FileNotFoundException { //Se determino que Stack era el tipo de lista mas apropiada para ordenar
         Scanner entrada;
-        Stack<Number> numeros = new Stack<Number>();
+        Comparable[] numeros = new Comparable[sizeArray];
         if (ordered) {
             entrada = new Scanner(new File("numerosOrdenados.txt"));
         } else {
             entrada = new Scanner(new File("numerosAleatoreos.txt"));
         }
+        int cont = 0;
         while(entrada.hasNextLine()) {
-            numeros.add(Number.parseNumber(entrada.nextLine()));
+            numeros[cont] = Integer.parseInt(entrada.nextLine());
+            cont++;
         }
         entrada.close();
         return numeros;
     }
 
     //Solo para imprimir los numeros y ver si se ordenaron
-    private static void imprimirNumeros(Stack<Number> numbers) {
+    private static void imprimirNumeros(Comparable[] list) {
         System.out.println("----------------Numeros-----------------");
-        for (int i = 0; i < numbers.size(); i++) {
-            System.out.println(numbers.get(i).getValue());
+        for (int i = 0; i < list.length; i++) {
+            System.out.println(list[i]);
         }
+    }
+
+    //Se han realizado estos metodos para el RadixSort, ya que este no acepta Comparable[] en si
+    //Y para no cargarle procesos a la clase de RadixSort se han realizado aca
+    //Asi el profiler puede verificar bien la cantidad de CPU que consumio solo el ordenar
+    //Y no convertir la lista tambien
+    private static int[] comparableToInt(Comparable[] comparables) {
+        int[] ints = new int[comparables.length];
+        for (int i = 0; i < comparables.length; i++) {
+            ints[i] = (int) comparables[i];
+        }
+        return ints;
+    }
+    private static Comparable[] intToComparable(int[] ints) {
+        Comparable[] comparables = new Comparable[ints.length];
+        for (int i = 0; i < ints.length; i++) {
+            comparables[i] = ints[i];
+        }
+        return comparables;
     }
 }

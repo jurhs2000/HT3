@@ -1,8 +1,8 @@
 package com.julioherrera;
 
-import java.util.Stack;
+import java.util.Vector;
 
 public interface Sort {
 
-    public Stack<Number> sort(Stack<Number> numbersToOrder);
+    public Comparable[] sort(Comparable[] numbersToOrder);
 }
