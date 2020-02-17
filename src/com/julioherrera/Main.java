@@ -10,6 +10,14 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
+/**
+ * Sorting Program
+ *
+ * @author <Authors name>
+ * @since <pre>feb. 16, 2020</pre>
+ * @version 1.0
+ */
+
 public class Main {
 
     private static int sizeArray;
@@ -151,7 +159,9 @@ public class Main {
         bufferedWriter.close();
     }
 
-    private static Comparable[] readFile(boolean ordered) throws FileNotFoundException { //Se determino que Stack era el tipo de lista mas apropiada para ordenar
+
+    //inspirado de http://decodigo.com/java-leer-un-archivo-de-texto
+    private static Comparable[] readFile(boolean ordered) throws FileNotFoundException {
         Scanner entrada;
         Comparable[] numeros = new Comparable[sizeArray];
         if (ordered) {

@@ -1,5 +1,13 @@
 package com.julioherrera;
 
+/**
+ * QuickSort
+ *
+ * @author <Authors name>
+ * @since <pre>feb. 16, 2020</pre>
+ * @version 1.0
+ */
+
 public class QuickSort implements Sort {
 
     public QuickSort() {}
@@ -9,8 +17,18 @@ public class QuickSort implements Sort {
         return numbersToOrder;
     }
 
-    //Inspirado en Ordenamiento Quicksort (Rápido!) en Java de: Jorge - CodigoFacilito
-    //https://www.youtube.com/watch?v=yXy7WzgUaSA
+    /*
+     * Este sort va poniendo los mayores de lado derecho y los menores del izquierdo
+     * Usa recursividad para llegar al ultimo nivel de ordenamiento de la lista
+     * Inspirado en Ordenamiento Quicksort (Rápido!) en Java de: Jorge - CodigoFacilito
+     * https://www.youtube.com/watch?v=yXy7WzgUaSA
+     * pre: r es la ultima posicion de la lista
+     * post: --
+     * @param numbers es la lista a ordenar
+     * @param l es la posicion desde la que se comprobara de lado izquierdo
+     * @param r es la poosicion hasta la que se comprobara de lado derecho
+     * @return La lista ya ordenada
+     * */
     private Comparable[] quick(Comparable[] numbers, int l, int r) {
         if (l >= r) {
             return numbers;
